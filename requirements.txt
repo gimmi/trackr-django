@@ -1,0 +1,2 @@
+distribute==0.6.49
+Django==1.5.4
