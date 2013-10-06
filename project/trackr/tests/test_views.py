@@ -13,5 +13,19 @@ class ItemsViewTest(APITestCase):
 			'id': 1,
 			'title': 'item 1',
 			'body': 'body',
+			'tags': []
 		}])
 
+class ItemViewTest(APITestCase):
+	def test_get_item(self):
+		Item.objects.create(title='item 1', body='body')
+
+		response = self.client.get('/items/1/')
+		
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
+		self.assertEqual(response.data, {
+			'id': 1,
+			'title': 'item 1',
+			'body': 'body',
+			'tags': []
+		})
