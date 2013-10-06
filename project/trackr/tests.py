@@ -38,3 +38,27 @@ class ItemTest(TestCase):
 		tags = item.tags.all()
 		self.assertEqual(len(tags), 1)
 		self.assertEqual(tags[0].name, 'tag 1')
+
+from django.test import TestCase
+from trackr.models import Item, Tag
+from trackr.serializers import ItemSerializer
+
+class ItemSerializerTest(TestCase):
+	def test_serialize(self):
+		item = Item.objects.create(title='a title', body='a body')
+		data = ItemSerializer(item).data
+
+		self.assertEqual(data, {'id': 1, 'title': 'a title'})
+
+from rest_framework.test import APITestCase
+from rest_framework import status
+
+class ItemsViewTest(APITestCase):
+	def test_item_list(self):
+		Item.objects.create(title='item 1')
+
+		response = self.client.get('/items/')
+		
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
+		self.assertEqual(response.data, [{'id': 1, 'title': 'item 1'}])
+
