@@ -6,4 +6,4 @@ from trackr.models import Item
 class ItemSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Item
-		fields = ('id', 'title')
+		fields = ('id', 'title', 'body')

@@ -7,4 +7,8 @@ class ItemSerializerTest(TestCase):
 		item = Item.objects.create(title='a title', body='a body')
 		data = ItemSerializer(item).data
 
-		self.assertEqual(data, {'id': 1, 'title': 'a title'})
+		self.assertEqual(data, {
+			'id': 1, 
+			'title': 'a title',
+			'body': 'a body',
+		})
