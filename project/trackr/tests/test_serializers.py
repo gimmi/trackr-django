@@ -14,5 +14,11 @@ class ItemSerializerTest(TestCase):
 			'id': 1, 
 			'title': 'a title',
 			'body': 'a body',
-			'tags': [1, 2]
+			'tags': [{
+				'id': 1,
+				'name': 'tag1'
+			}, {
+				'id': 2,
+				'name': 'tag2'
+			}]
 		})
