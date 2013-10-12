@@ -5,6 +5,7 @@ from rest_framework import generics
 class ItemsView(generics.ListAPIView):
 	queryset = Item.objects.all()
 	serializer_class = ItemSerializer
+	paginate_by = 2
 
 class ItemView(generics.RetrieveAPIView):
 	queryset = Item.objects.all()
