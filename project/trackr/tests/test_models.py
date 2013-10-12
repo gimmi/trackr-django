@@ -1,10 +1,9 @@
 from django.test import TestCase
-from trackr.models import Item, Tag
+from trackr.models import Item, Tag, Comment
+from datetime import datetime
+from django.utils.timezone import utc
 
 class ItemTest(TestCase):
-	def setUp(self):
-		pass
-
 	def test_create_and_retrieve_items(self):
 		self.assertEqual(Item.objects.count(), 0)
 
@@ -38,3 +37,22 @@ class ItemTest(TestCase):
 		tags = item.tags.all()
 		self.assertEqual(len(tags), 1)
 		self.assertEqual(tags[0].name, 'tag 1')
+
+class CommentTest(TestCase):
+	def test_create_and_retrieve(self):
+		self.assertEqual(Comment.objects.count(), 0)
+		item = Item.objects.create()
+
+		comment = Comment()
+		comment.item = item
+		comment.timestamp = datetime(2013, 12, 30, 20, 30, tzinfo=utc)
+		comment.body = 'comment 1'
+		comment.save()
+
+		self.assertEqual(Comment.objects.count(), 1)
+		self.assertEqual(item.comment_set.count(), 1)
+
+		comment = Comment.objects.get(pk=1)
+		self.assertEqual(comment.body, 'comment 1')
+		self.assertEqual(comment.timestamp, datetime(2013, 12, 30, 20, 30, tzinfo=utc))
+		self.assertEqual(comment.item.id, 1)
