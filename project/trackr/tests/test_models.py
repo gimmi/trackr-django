@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.test import TestCase
 from trackr.models import Item, Tag, Comment
 from datetime import datetime
@@ -42,9 +43,11 @@ class CommentTest(TestCase):
 	def test_create_and_retrieve(self):
 		self.assertEqual(Comment.objects.count(), 0)
 		item = Item.objects.create()
+		user = User.objects.create_user('gimmi', 'gimmi@me.com', 'secret')
 
 		comment = Comment()
 		comment.item = item
+		comment.user = user
 		comment.timestamp = datetime(2013, 12, 30, 20, 30, tzinfo=utc)
 		comment.body = 'comment 1'
 		comment.save()
