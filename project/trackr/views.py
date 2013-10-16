@@ -1,5 +1,6 @@
 from trackr.models import Item, Tag, Comment
-from trackr.serializers import ItemSerializer, TagSerializer, CommentSerializer
+from django.contrib.auth.models import User
+from trackr.serializers import ItemSerializer, TagSerializer, CommentSerializer, UserSerializer
 from rest_framework import generics
 
 
@@ -42,3 +43,6 @@ class CommentsView(generics.ListAPIView):
         item = Item.objects.get(pk=item_id)
         return item.comment_set.all()
 
+class UserView(generics.RetrieveAPIView):
+	queryset = User.objects.all()
+	serializer_class = UserSerializer

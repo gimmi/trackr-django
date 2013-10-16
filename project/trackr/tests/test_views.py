@@ -18,11 +18,11 @@ class ItemsViewTest(APITestCase):
 			'next': None,
 			'previous': None,
 			'results': [{
-	            'id': 1,
-	            'title': 'item 1',
-	            'body': 'body',
-	            'tags': []
-            }]
+				'id': 1,
+				'title': 'item 1',
+				'body': 'body',
+				'tags': []
+			}]
 		})
 
 
@@ -56,7 +56,7 @@ class CommentViewTest(APITestCase):
 		self.assertEqual(response.status_code, status.HTTP_200_OK)
 		self.assertEqual(response.data, {
 			'id': 1,
-		    'user': { 'id': 1, 'username': 'gimmi' },
+			'user': { 'id': 1, 'username': 'gimmi' },
 			'timestamp': datetime(2013, 12, 30, 20, 30, tzinfo=utc),
 			'body': 'comment 1',
 		})
@@ -84,14 +84,26 @@ class CommentsViewTest(APITestCase):
 			'next': None,
 			'previous': None,
 			'results': [{
-	            'id': 1,
-			    'user': { 'id': 1, 'username': 'gimmi' },
-	            'timestamp': datetime(2013, 12, 30, 20, 30, tzinfo=utc),
-	            'body': 'comment 1',
-            }, {
-	            'id': 2,
-			    'user': { 'id': 2, 'username': 'foo' },
-	            'timestamp': datetime(2013, 12, 30, 21, 30, tzinfo=utc),
-	            'body': 'comment 2',
-            }]
+				'id': 1,
+				'user': { 'id': 1, 'username': 'gimmi' },
+				'timestamp': datetime(2013, 12, 30, 20, 30, tzinfo=utc),
+				'body': 'comment 1',
+			}, {
+				'id': 2,
+				'user': { 'id': 2, 'username': 'foo' },
+				'timestamp': datetime(2013, 12, 30, 21, 30, tzinfo=utc),
+				'body': 'comment 2',
+			}]
+		})
+
+class UserViewTest(APITestCase):
+	def test_get_user(self):
+		User.objects.create_user('foo', 'foo@foo.com', 'secret')
+
+		response = self.client.get('/users/1/')
+
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
+		self.assertEqual(response.data, {
+			'id': 1,
+			'username': 'foo'
 		})
