@@ -1,10 +1,12 @@
 PUSHD %~dp0
 IF EXIST .venv GOTO ACTIVATE
 python -mvenv .venv
-curl -o .venv\distribute_setup.py http://python-distribute.org/distribute_setup.py
-.venv\Scripts\python .venv\distribute_setup.py
-.venv\Scripts\easy_install pip
-.venv\Scripts\pip install -r requirements.txt
+CD .venv
+curl -k -o ez_setup.py https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py
+Scripts\python ez_setup.py
+curl -k -o get-pip.py https://raw.github.com/pypa/pip/master/contrib/get-pip.py
+Scripts\python get-pip.py
+Scripts\pip install -r ..\requirements.txt
 :ACTIVATE
-CALL .venv\Scripts\activate.bat
+CALL Scripts\activate.bat
 POPD
