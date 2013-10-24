@@ -4,11 +4,12 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 from datetime import datetime
 from django.utils.timezone import utc
+from trackr.tests import testutils
 
 
 class ItemsViewTest(APITestCase):
 	def test_item_list(self):
-		Item.objects.create(title='item 1', body='body')
+		testutils.create_valid_item()
 
 		response = self.client.get('/items/')
 
@@ -19,31 +20,31 @@ class ItemsViewTest(APITestCase):
 			'previous': None,
 			'results': [{
 				'id': 1,
-				'title': 'item 1',
-				'body': 'body',
-				'tags': []
+				'title': 'item title',
+				'body': 'item body',
+				'tags': [{ 'id': 1, 'name': 'tag name' }]
 			}]
 		})
 
 
 class ItemViewTest(APITestCase):
 	def test_get_item(self):
-		Item.objects.create(title='item 1', body='body')
+		testutils.create_valid_item()
 
 		response = self.client.get('/items/1/')
 
 		self.assertEqual(response.status_code, status.HTTP_200_OK)
 		self.assertEqual(response.data, {
 			'id': 1,
-			'title': 'item 1',
-			'body': 'body',
-			'tags': []
+			'title': 'item title',
+			'body': 'item body',
+			'tags': [{ 'id': 1, 'name': 'tag name' }]
 		})
 
 
 class CommentViewTest(APITestCase):
 	def test_get_comment(self):
-		item = Item.objects.create()
+		item = testutils.create_valid_item()
 		user = User.objects.create_user('gimmi', 'gimmi@me.com', 'secret')
 		item.comment_set.create(
 			user=user,
@@ -64,7 +65,7 @@ class CommentViewTest(APITestCase):
 
 class CommentsViewTest(APITestCase):
 	def test_get_comments(self):
-		item = Item.objects.create()
+		item = testutils.create_valid_item()
 		item.comment_set.create(
 			user=User.objects.create_user('gimmi', 'gimmi@me.com', 'secret'),
 			timestamp=datetime(2013, 12, 30, 20, 30, tzinfo=utc),

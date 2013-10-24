@@ -3,6 +3,7 @@ from django.test import TestCase
 from trackr.models import Item, Tag, Comment
 from datetime import datetime
 from django.utils.timezone import utc
+from trackr.tests import testutils
 
 
 class ItemTest(TestCase):
@@ -46,7 +47,7 @@ class TagTest(TestCase):
 class CommentTest(TestCase):
 	def test_create_and_retrieve(self):
 		self.assertEqual(Comment.objects.count(), 0)
-		item = Item.objects.create()
+		item = testutils.create_valid_item()
 		user = User.objects.create_user('gimmi', 'gimmi@me.com', 'secret')
 
 		comment = Comment()
