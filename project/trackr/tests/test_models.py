@@ -4,6 +4,7 @@ from trackr.models import Item, Tag, Comment
 from datetime import datetime
 from django.utils.timezone import utc
 
+
 class ItemTest(TestCase):
 	def test_create_and_retrieve_items(self):
 		self.assertEqual(Item.objects.count(), 0)
@@ -17,16 +18,6 @@ class ItemTest(TestCase):
 		item = Item.objects.get(id=item.id)
 		self.assertIsInstance(item, Item)
 
-	def test_create_tag(self):
-		self.assertEqual(Tag.objects.count(), 0)
-
-		Tag.objects.create(name='tag1')
-
-		tag2 = Tag(name='tag2')
-		tag2.save()
-
-		self.assertEqual(Tag.objects.count(), 2)
-
 	def test_associate_tag_to_item(self):
 		item = Item.objects.create(title='item 1')
 		tag = Tag.objects.create(name='tag 1')
@@ -38,6 +29,19 @@ class ItemTest(TestCase):
 		tags = item.tags.all()
 		self.assertEqual(len(tags), 1)
 		self.assertEqual(tags[0].name, 'tag 1')
+
+
+class TagTest(TestCase):
+	def test_create_tag(self):
+		self.assertEqual(Tag.objects.count(), 0)
+
+		Tag.objects.create(name='tag1')
+
+		tag2 = Tag(name='tag2')
+		tag2.save()
+
+		self.assertEqual(Tag.objects.count(), 2)
+
 
 class CommentTest(TestCase):
 	def test_create_and_retrieve(self):
