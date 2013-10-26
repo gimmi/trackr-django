@@ -45,9 +45,8 @@ class ItemViewTest(APITestCase):
 class CommentViewTest(APITestCase):
 	def test_get_comment(self):
 		item = testutils.create_valid_item()
-		user = User.objects.create_user('gimmi', 'gimmi@me.com', 'secret')
 		item.comment_set.create(
-			user=user,
+			user=User.objects.create_user('foo', 'foo@me.com', 'secret'),
 			timestamp=datetime(2013, 12, 30, 20, 30, tzinfo=utc),
 			body='comment 1'
 		)
@@ -57,7 +56,7 @@ class CommentViewTest(APITestCase):
 		self.assertEqual(response.status_code, status.HTTP_200_OK)
 		self.assertEqual(response.data, {
 			'id': 1,
-			'user': { 'id': 1, 'username': 'gimmi' },
+			'user': { 'id': 2, 'username': 'foo' },
 			'timestamp': datetime(2013, 12, 30, 20, 30, tzinfo=utc),
 			'body': 'comment 1',
 		})
@@ -67,12 +66,12 @@ class CommentsViewTest(APITestCase):
 	def test_get_comments(self):
 		item = testutils.create_valid_item()
 		item.comment_set.create(
-			user=User.objects.create_user('gimmi', 'gimmi@me.com', 'secret'),
+			user=User.objects.create_user('foo', 'foo@me.com', 'secret'),
 			timestamp=datetime(2013, 12, 30, 20, 30, tzinfo=utc),
 			body='comment 1'
 		)
 		item.comment_set.create(
-			user=User.objects.create_user('foo', 'foo@bar.com', 'secret'),
+			user=User.objects.create_user('bar', 'bar@me.com', 'secret'),
 			timestamp=datetime(2013, 12, 30, 21, 30, tzinfo=utc),
 			body='comment 2'
 		)
@@ -86,12 +85,12 @@ class CommentsViewTest(APITestCase):
 			'previous': None,
 			'results': [{
 				'id': 1,
-				'user': { 'id': 1, 'username': 'gimmi' },
+				'user': { 'id': 2, 'username': 'foo' },
 				'timestamp': datetime(2013, 12, 30, 20, 30, tzinfo=utc),
 				'body': 'comment 1',
 			}, {
 				'id': 2,
-				'user': { 'id': 2, 'username': 'foo' },
+				'user': { 'id': 3, 'username': 'bar' },
 				'timestamp': datetime(2013, 12, 30, 21, 30, tzinfo=utc),
 				'body': 'comment 2',
 			}]

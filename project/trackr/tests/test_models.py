@@ -47,8 +47,8 @@ class TagTest(TestCase):
 class CommentTest(TestCase):
 	def test_create_and_retrieve(self):
 		self.assertEqual(Comment.objects.count(), 0)
-		item = testutils.create_valid_item()
-		user = User.objects.create_user('gimmi', 'gimmi@me.com', 'secret')
+		user = testutils.create_valid_user()
+		item = testutils.create_valid_item(user=user)
 
 		comment = Comment()
 		comment.item = item
