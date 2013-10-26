@@ -13,14 +13,16 @@ class ItemTest(TestCase):
 		item = Item()
 		item.title = 'item 1'
 		item.body = 'item 1 body'
+		item.user = testutils.create_valid_user()
 		item.save()
 
 		self.assertEqual(Item.objects.count(), 1)
 		item = Item.objects.get(id=item.id)
 		self.assertIsInstance(item, Item)
+		self.assertEqual(item.user.id, 1)
 
 	def test_associate_tag_to_item(self):
-		item = Item.objects.create(title='item 1')
+		item = Item.objects.create(title='item 1', user=testutils.create_valid_user())
 		tag = Tag.objects.create(name='tag 1')
 
 		item.tags.add(tag)

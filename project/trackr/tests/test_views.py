@@ -22,7 +22,8 @@ class ItemsViewTest(APITestCase):
 				'id': 1,
 				'title': 'item title',
 				'body': 'item body',
-				'tags': [{ 'id': 1, 'name': 'tag name' }]
+				'tags': [{ 'id': 1, 'name': 'tag name' }],
+				'user': { 'id': 1, 'username': 'gimmi' }
 			}]
 		})
 
@@ -38,7 +39,8 @@ class ItemViewTest(APITestCase):
 			'id': 1,
 			'title': 'item title',
 			'body': 'item body',
-			'tags': [{ 'id': 1, 'name': 'tag name' }]
+			'tags': [{ 'id': 1, 'name': 'tag name' }],
+			'user': { 'id': 1, 'username': 'gimmi' }
 		})
 
 

@@ -17,10 +17,11 @@ class TagSerializer(serializers.ModelSerializer):
 
 class ItemSerializer(serializers.ModelSerializer):
 	tags = TagSerializer(many=True)
+	user = UserSerializer()
 
 	class Meta:
 		model = Item
-		fields = ('id', 'title', 'body', 'tags')
+		fields = ('id', 'title', 'body', 'tags', 'user')
 
 
 class CommentSerializer(serializers.ModelSerializer):
