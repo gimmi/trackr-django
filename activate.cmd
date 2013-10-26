@@ -7,6 +7,7 @@ Scripts\python ez_setup.py
 curl -k -o get-pip.py https://raw.github.com/pypa/pip/master/contrib/get-pip.py
 Scripts\python get-pip.py
 Scripts\pip install -r ..\requirements.txt
+CD ..
 :ACTIVATE
-CALL Scripts\activate.bat
+CALL .venv\Scripts\activate.bat
 POPD
