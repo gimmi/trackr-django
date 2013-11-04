@@ -28,3 +28,26 @@ class ItemSerializerTest(TestCase):
                 'username': 'gimmi'
             }
         })
+
+    def test_deserialize(self):
+        target = ItemSerializer(data={
+            'id': 1,
+            'title': 'a title',
+            'body': 'a body',
+            'tags': [{
+                'id': 1,
+                'name': 'tag1'
+            }, {
+                'id': 2,
+                'name': 'tag2'
+            }],
+            'user': {
+                'id': 1,
+                'username': 'gimmi'
+            }
+        })
+
+        self.assertTrue(target.is_valid())
+        actual = target.object
+        self.assertEqual(actual.title, 'a title')
+        self.assertEqual(actual.body, 'a body')
