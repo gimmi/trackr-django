@@ -4,6 +4,7 @@ from rest_framework import status
 from datetime import datetime
 from django.utils.timezone import utc
 from trackr.tests import testutils
+from trackr.models import Tag
 
 
 class ItemsViewTest(APITestCase):
@@ -109,3 +110,30 @@ class UserViewTest(APITestCase):
             'id': 1,
             'username': 'foo'
         })
+
+
+class TagsViewTest(APITestCase):
+    def test_get(self):
+        testutils.create_valid_tag()
+
+        response = self.client.get('/tags/')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, [{
+            'id': 1,
+            'name': 'tag name'
+        }])
+
+    def test_post(self):
+        response = self.client.post('/tags/', {
+            'name': 'a name'
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data, {
+            'id': 1,
+            'name': 'a name'
+        })
+
+        tag = Tag.objects.get(pk=1)
+        self.assertEqual(tag.name, 'a name')

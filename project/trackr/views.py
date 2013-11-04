@@ -20,7 +20,7 @@ class TagView(generics.RetrieveAPIView):
     serializer_class = TagSerializer
 
 
-class TagsView(generics.ListAPIView):
+class TagsView(generics.ListCreateAPIView):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
 
