@@ -63,6 +63,31 @@ class CommentViewTest(APITestCase):
             'body': 'comment 1',
         })
 
+    def test_update_comment(self):
+        item = testutils.create_valid_item()
+        item.comment_set.create(
+            user=User.objects.create_user('foo', 'foo@me.com', 'secret'),
+            timestamp=datetime(2013, 12, 30, 20, 30, tzinfo=utc),
+            body='comment 1'
+        )
+
+        response = self.client.put('/items/1/comments/1/', {
+            'user': 1,
+            'body': 'change',
+            'timestamp': datetime(2013, 1, 1, 0, 0, tzinfo=utc)
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, {
+            'id': 1,
+            'user': 1,
+            'body': 'change',
+            'timestamp': datetime(2013, 1, 1, 0, 0, tzinfo=utc)
+        })
+        comment = Comment.objects.get(pk=1)
+        self.assertEqual(comment.user.id, 1)
+        self.assertEqual(comment.body, 'change')
+
 
 class CommentsViewTest(APITestCase):
     def test_get_comments(self):

@@ -25,7 +25,7 @@ class TagsView(generics.ListCreateAPIView):
     serializer_class = TagSerializer
 
 
-class CommentView(generics.RetrieveAPIView):
+class CommentView(generics.RetrieveUpdateAPIView):
     serializer_class = CommentSerializer
 
     def get_queryset(self):
