@@ -41,7 +41,7 @@ class ItemSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = serializers.PrimaryKeyRelatedField()
 
     class Meta:
         model = Comment

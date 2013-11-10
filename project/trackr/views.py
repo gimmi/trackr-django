@@ -34,14 +34,19 @@ class CommentView(generics.RetrieveAPIView):
         return item.comment_set.all()
 
 
-class CommentsView(generics.ListAPIView):
+class CommentsView(generics.ListCreateAPIView):
     serializer_class = CommentSerializer
     paginate_by = 2
 
-    def get_queryset(self):
+    def get_item(self):
         item_id = int(self.kwargs['item_id'])
-        item = Item.objects.get(pk=item_id)
-        return item.comment_set.all()
+        return Item.objects.get(pk=item_id)
+
+    def get_queryset(self):
+        return self.get_item().comment_set.all()
+
+    def pre_save(self, comment):
+        comment.item = self.get_item()
 
 
 class UserView(generics.RetrieveAPIView):

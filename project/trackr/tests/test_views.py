@@ -4,7 +4,7 @@ from rest_framework import status
 from datetime import datetime
 from django.utils.timezone import utc
 from trackr.tests import testutils
-from trackr.models import Tag
+from trackr.models import Tag, Comment
 
 
 class ItemsViewTest(APITestCase):
@@ -58,7 +58,7 @@ class CommentViewTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, {
             'id': 1,
-            'user': {'id': 2, 'username': 'foo'},
+            'user': 2,
             'timestamp': datetime(2013, 12, 30, 20, 30, tzinfo=utc),
             'body': 'comment 1',
         })
@@ -87,16 +87,33 @@ class CommentsViewTest(APITestCase):
             'previous': None,
             'results': [{
                 'id': 1,
-                'user': {'id': 2, 'username': 'foo'},
+                'user': 2,
                 'timestamp': datetime(2013, 12, 30, 20, 30, tzinfo=utc),
                 'body': 'comment 1',
             }, {
                 'id': 2,
-                'user': {'id': 3, 'username': 'bar'},
+                'user': 3,
                 'timestamp': datetime(2013, 12, 30, 21, 30, tzinfo=utc),
                 'body': 'comment 2',
             }]
         })
+
+    def test_create_comment(self):
+        testutils.create_valid_item()
+
+        response = self.client.post('/items/1/comments/', {
+            'user': 1,
+            'timestamp': datetime(2013, 12, 30, 20, 30, tzinfo=utc),
+            'body': 'comment 1'
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        comment = Comment.objects.get(pk=1)
+        self.assertEqual(comment.body, 'comment 1')
+        self.assertEqual(comment.user.id, 1)
+        self.assertEqual(comment.item.id, 1)
+        self.assertEqual(comment.timestamp, datetime(2013, 12, 30, 20, 30, tzinfo=utc))
 
 
 class UserViewTest(APITestCase):
