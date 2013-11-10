@@ -3,6 +3,22 @@ from django.contrib.auth.models import User
 from trackr.models import Item, Tag, Comment
 
 
+# class TagRelatedField(serializers.RelatedField):
+#     def to_native(self, value):
+#         return TagSerializer(value).data
+
+#     def from_native(self, data):
+#         return Tag.objects.get(pk=data['id'])
+
+
+# class UserRelatedField(serializers.RelatedField):
+#     def to_native(self, value):
+#         return UserSerializer(value).data
+
+#     def from_native(self, data):
+#         return User.objects.get(pk=data['id'])
+
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
