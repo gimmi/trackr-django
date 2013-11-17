@@ -179,3 +179,10 @@ class TagsViewTest(APITestCase):
 
         tag = Tag.objects.get(pk=1)
         self.assertEqual(tag.name, 'a name')
+
+    def test_delete(self):
+        testutils.create_valid_tag()
+
+        response = self.client.delete('/tags/1/')
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)

@@ -15,7 +15,7 @@ class ItemsView(generics.ListAPIView):
     paginate_by = 2
 
 
-class TagView(generics.RetrieveAPIView):
+class TagView(generics.RetrieveDestroyAPIView):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
 
