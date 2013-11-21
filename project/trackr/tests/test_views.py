@@ -140,6 +140,28 @@ class CommentsViewTest(APITestCase):
         self.assertEqual(comment.item.id, 1)
         self.assertEqual(comment.timestamp, datetime(2013, 12, 30, 20, 30, tzinfo=utc))
 
+    def test_update_comment(self):
+        item = testutils.create_valid_item()
+        item.comment_set.create(
+            user=User.objects.create_user('foo', 'foo@me.com', 'secret'),
+            timestamp=datetime(2013, 12, 30, 20, 30, tzinfo=utc),
+            body='comment 1'
+        )
+
+        response = self.client.put('/items/1/comments/1/', {
+            'user': 1,
+            'timestamp': datetime(2013, 12, 30, 20, 30, tzinfo=utc),
+            'body': 'comment modified'
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, {
+            'id': 1,
+            'user': 1,
+            'timestamp': datetime(2013, 12, 30, 20, 30, tzinfo=utc),
+            'body': 'comment modified'
+        })
+
 
 class UserViewTest(APITestCase):
     def test_get_user(self):
@@ -186,3 +208,4 @@ class TagsViewTest(APITestCase):
         response = self.client.delete('/tags/1/')
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(Tag.objects.count(), 0)
