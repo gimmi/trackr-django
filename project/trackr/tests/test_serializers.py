@@ -78,3 +78,15 @@ class UserSerializerTest(TestCase):
         self.assertEqual(User.objects.get(pk=1).username, 'gimmi')
         target.save()
         self.assertEqual(User.objects.get(pk=1).username, 'gimmi2')
+
+    def test_should_deserialize_new_user(self):
+        target = UserSerializer(data={
+            'username': 'gimmi'
+        })
+
+        self.assertTrue(target.is_valid())
+        self.assertEqual(target.object.username, 'gimmi')
+
+        self.assertEqual(User.objects.count(), 0)
+        target.save()
+        self.assertEqual(User.objects.count(), 1)
