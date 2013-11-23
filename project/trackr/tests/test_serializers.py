@@ -1,6 +1,7 @@
 from django.test import TestCase
 from trackr.models import Item, Tag
-from trackr.serializers import ItemSerializer
+from django.contrib.auth.models import User
+from trackr.serializers import ItemSerializer, UserSerializer
 from trackr.tests import testutils
 
 
@@ -51,3 +52,29 @@ class ItemSerializerTest(TestCase):
         actual = target.object
         self.assertEqual(actual.title, 'a title')
         self.assertEqual(actual.body, 'a body')
+
+
+class UserSerializerTest(TestCase):
+    def test_serialize(self):
+        user = testutils.create_valid_user()
+
+        target = UserSerializer(user)
+
+        self.assertEqual(target.data, {
+            'id': 1,
+            'username': 'gimmi',
+        })
+
+    def test_deserialize_into_existing_user(self):
+        user = testutils.create_valid_user()
+
+        target = UserSerializer(user, partial=True, data={
+            'username': 'gimmi2'
+        })
+
+        self.assertTrue(target.is_valid())
+        self.assertEqual(target.object.username, 'gimmi2')
+
+        self.assertEqual(User.objects.get(pk=1).username, 'gimmi')
+        target.save()
+        self.assertEqual(User.objects.get(pk=1).username, 'gimmi2')
