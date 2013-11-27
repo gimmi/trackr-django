@@ -47,13 +47,19 @@ class TagsView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class CommentView(generics.RetrieveUpdateAPIView):
-    serializer_class = CommentSerializer
+class CommentView(APIView):
+    def get(self, request, item_id, pk):
+        comment = Item.objects.get(pk=item_id).comment_set.get(pk=pk)
+        serializer = CommentSerializer(comment)
+        return Response(serializer.data)
 
-    def get_queryset(self):
-        item_id = int(self.kwargs['item_id'])
-        item = Item.objects.get(pk=item_id)
-        return item.comment_set.all()
+    def put(self, request, item_id, pk):
+        comment = Item.objects.get(pk=item_id).comment_set.get(pk=pk)
+        serializer = CommentSerializer(comment, data=request.DATA)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CommentsView(generics.ListCreateAPIView):
