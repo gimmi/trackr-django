@@ -18,9 +18,19 @@ class ItemsView(generics.ListAPIView):
     paginate_by = 2
 
 
-class TagView(generics.RetrieveDestroyAPIView):
+class TagView(APIView):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
+
+    def get(self, request, pk):
+        tag = Tag.objects.get(pk=pk)
+        serializer = TagSerializer(tag)
+        return Response(serializer.data)
+
+    def delete(self, request, pk):
+        tag = Tag.objects.get(pk=pk)
+        tag.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class TagsView(APIView):
