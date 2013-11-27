@@ -19,9 +19,6 @@ class ItemsView(generics.ListAPIView):
 
 
 class TagView(APIView):
-    queryset = Tag.objects.all()
-    serializer_class = TagSerializer
-
     def get(self, request, pk):
         tag = Tag.objects.get(pk=pk)
         serializer = TagSerializer(tag)
