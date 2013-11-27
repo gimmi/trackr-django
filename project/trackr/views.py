@@ -7,15 +7,18 @@ from rest_framework.response import Response
 from rest_framework import status
 
 
-class ItemView(generics.RetrieveAPIView):
-    queryset = Item.objects.all()
-    serializer_class = ItemSerializer
+class ItemView(APIView):
+    def get(self, request, pk):
+        item = Item.objects.get(pk=pk)
+        serializer = ItemSerializer(item)
+        return Response(serializer.data)
 
 
-class ItemsView(generics.ListAPIView):
-    queryset = Item.objects.all()
-    serializer_class = ItemSerializer
-    paginate_by = 2
+class ItemsView(APIView):
+    def get(self, request):
+        items = Item.objects.all()
+        serializer = ItemSerializer(items, many=True)
+        return Response(serializer.data)
 
 
 class TagView(APIView):
