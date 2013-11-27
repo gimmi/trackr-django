@@ -31,6 +31,8 @@ class ItemSerializerTest(TestCase):
         })
 
     def test_deserialize(self):
+        testutils.create_valid_tag()
+
         target = ItemSerializer(data={
             'id': 1,
             'title': 'a title',
@@ -38,9 +40,6 @@ class ItemSerializerTest(TestCase):
             'tags': [{
                 'id': 1,
                 'name': 'tag1'
-            }, {
-                'id': 2,
-                'name': 'tag2'
             }],
             'user': {
                 'id': 1,
@@ -48,10 +47,13 @@ class ItemSerializerTest(TestCase):
             }
         })
 
+        target.is_valid()
         self.assertTrue(target.is_valid())
+        target.save()
         actual = target.object
         self.assertEqual(actual.title, 'a title')
         self.assertEqual(actual.body, 'a body')
+        self.assertEqual(actual.tags.all()[0].name, 'tag name')
 
 
 class UserSerializerTest(TestCase):
