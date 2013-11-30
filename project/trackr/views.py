@@ -48,12 +48,12 @@ class TagsView(APIView):
 
 class CommentView(APIView):
     def get(self, request, item_id, pk):
-        comment = Item.objects.get(pk=item_id).comment_set.get(pk=pk)
+        comment = Item.objects.get(pk=item_id).comments.get(pk=pk)
         serializer = CommentSerializer(comment)
         return Response(serializer.data)
 
     def put(self, request, item_id, pk):
-        comment = Item.objects.get(pk=item_id).comment_set.get(pk=pk)
+        comment = Item.objects.get(pk=item_id).comments.get(pk=pk)
         serializer = CommentSerializer(comment, data=request.DATA)
         if serializer.is_valid():
             serializer.save()
@@ -64,7 +64,7 @@ class CommentView(APIView):
 class CommentsView(APIView):
     def get(self, request, item_id):
         item = Item.objects.get(pk=item_id)
-        comments = item.comment_set.all()
+        comments = item.comments.all()
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
 

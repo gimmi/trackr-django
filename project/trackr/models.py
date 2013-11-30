@@ -9,12 +9,12 @@ class Tag(models.Model):
 class Item(models.Model):
     title = models.CharField(max_length=200)
     body = models.TextField()
-    tags = models.ManyToManyField(Tag)
-    user = models.ForeignKey(User)
+    tags = models.ManyToManyField(Tag, related_name='+')
+    user = models.ForeignKey(User, related_name='+')
 
 
 class Comment(models.Model):
     timestamp = models.DateTimeField()
     body = models.TextField()
-    item = models.ForeignKey(Item)
-    user = models.ForeignKey(User)
+    item = models.ForeignKey(Item, related_name='comments')
+    user = models.ForeignKey(User, related_name='+')

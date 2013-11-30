@@ -42,7 +42,7 @@ class ItemViewTest(APITestCase):
 class CommentViewTest(APITestCase):
     def test_get_comment(self):
         item = testutils.create_valid_item()
-        item.comment_set.create(
+        item.comments.create(
             user=User.objects.create_user('foo', 'foo@me.com', 'secret'),
             timestamp=datetime(2013, 12, 30, 20, 30, tzinfo=utc),
             body='comment 1'
@@ -60,7 +60,7 @@ class CommentViewTest(APITestCase):
 
     def test_update_comment(self):
         item = testutils.create_valid_item()
-        item.comment_set.create(
+        item.comments.create(
             user=User.objects.create_user('foo', 'foo@me.com', 'secret'),
             timestamp=datetime(2013, 12, 30, 20, 30, tzinfo=utc),
             body='comment 1'
@@ -87,12 +87,12 @@ class CommentViewTest(APITestCase):
 class CommentsViewTest(APITestCase):
     def test_get_comments(self):
         item = testutils.create_valid_item()
-        item.comment_set.create(
+        item.comments.create(
             user=User.objects.create_user('foo', 'foo@me.com', 'secret'),
             timestamp=datetime(2013, 12, 30, 20, 30, tzinfo=utc),
             body='comment 1'
         )
-        item.comment_set.create(
+        item.comments.create(
             user=User.objects.create_user('bar', 'bar@me.com', 'secret'),
             timestamp=datetime(2013, 12, 30, 21, 30, tzinfo=utc),
             body='comment 2'
@@ -132,7 +132,7 @@ class CommentsViewTest(APITestCase):
 
     def test_update_comment(self):
         item = testutils.create_valid_item()
-        item.comment_set.create(
+        item.comments.create(
             user=User.objects.create_user('foo', 'foo@me.com', 'secret'),
             timestamp=datetime(2013, 12, 30, 20, 30, tzinfo=utc),
             body='comment 1'

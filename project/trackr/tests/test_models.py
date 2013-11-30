@@ -60,7 +60,7 @@ class CommentTest(TestCase):
         comment.save()
 
         self.assertEqual(Comment.objects.count(), 1)
-        self.assertEqual(item.comment_set.count(), 1)
+        self.assertEqual(item.comments.count(), 1)
 
         comment = Comment.objects.get(pk=1)
         self.assertEqual(comment.body, 'comment 1')
