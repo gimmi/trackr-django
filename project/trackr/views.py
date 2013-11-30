@@ -62,19 +62,23 @@ class CommentView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class CommentsView(generics.ListCreateAPIView):
-    serializer_class = CommentSerializer
-    paginate_by = 2
+class CommentsView(APIView):
+    def get(self, request, item_id):
+        item = Item.objects.get(pk=item_id)
+        comments = item.comment_set.all()
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
 
-    def get_item(self):
-        item_id = int(self.kwargs['item_id'])
-        return Item.objects.get(pk=item_id)
-
-    def get_queryset(self):
-        return self.get_item().comment_set.all()
-
-    def pre_save(self, comment):
-        comment.item = self.get_item()
+    def post(self, request, item_id):
+        serializer = CommentSerializer(data=request.DATA)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        comment = serializer.object
+        item = Item.objects.get(pk=item_id)
+        comment.item = item
+        comment.save()
+        serializer = CommentSerializer(comment)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class UserView(generics.RetrieveAPIView):

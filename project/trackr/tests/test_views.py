@@ -101,22 +101,17 @@ class CommentsViewTest(APITestCase):
         response = self.client.get('/items/1/comments/')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, {
-            'count': 2,
-            'next': None,
-            'previous': None,
-            'results': [{
-                'id': 1,
-                'user': 2,
-                'timestamp': datetime(2013, 12, 30, 20, 30, tzinfo=utc),
-                'body': 'comment 1',
-            }, {
-                'id': 2,
-                'user': 3,
-                'timestamp': datetime(2013, 12, 30, 21, 30, tzinfo=utc),
-                'body': 'comment 2',
-            }]
-        })
+        self.assertEqual(response.data, [{
+            'id': 1,
+            'user': 2,
+            'timestamp': datetime(2013, 12, 30, 20, 30, tzinfo=utc),
+            'body': 'comment 1',
+        }, {
+            'id': 2,
+            'user': 3,
+            'timestamp': datetime(2013, 12, 30, 21, 30, tzinfo=utc),
+            'body': 'comment 2',
+        }])
 
     def test_create_comment(self):
         testutils.create_valid_item()
