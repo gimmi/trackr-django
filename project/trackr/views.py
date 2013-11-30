@@ -1,7 +1,6 @@
 from trackr.models import Item, Tag
 from django.contrib.auth.models import User
 from trackr.serializers import ItemSerializer, TagSerializer, CommentSerializer, UserSerializer
-from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -81,6 +80,8 @@ class CommentsView(APIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class UserView(generics.RetrieveAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+class UserView(APIView):
+    def get(self, request, pk):
+        user = User.objects.get(pk=pk)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
