@@ -11,7 +11,7 @@ class ItemsViewTest(APITestCase):
     def test_item_list(self):
         testutils.create_valid_item()
 
-        response = self.client.get('/items/')
+        response = self.client.get('/api/items/')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, {
@@ -31,7 +31,7 @@ class ItemViewTest(APITestCase):
     def test_get_item(self):
         testutils.create_valid_item()
 
-        response = self.client.get('/items/1/')
+        response = self.client.get('/api/items/1/')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, {
@@ -52,7 +52,7 @@ class CommentViewTest(APITestCase):
             body='comment 1'
         )
 
-        response = self.client.get('/items/1/comments/1/')
+        response = self.client.get('/api/items/1/comments/1/')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, {
@@ -70,7 +70,7 @@ class CommentViewTest(APITestCase):
             body='comment 1'
         )
 
-        response = self.client.put('/items/1/comments/1/', {
+        response = self.client.put('/api/items/1/comments/1/', {
             'user': 1,
             'body': 'change',
             'timestamp': datetime(2013, 1, 1, 0, 0, tzinfo=utc)
@@ -102,7 +102,7 @@ class CommentsViewTest(APITestCase):
             body='comment 2'
         )
 
-        response = self.client.get('/items/1/comments/')
+        response = self.client.get('/api/items/1/comments/')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, [{
@@ -120,7 +120,7 @@ class CommentsViewTest(APITestCase):
     def test_create_comment(self):
         testutils.create_valid_item()
 
-        response = self.client.post('/items/1/comments/', {
+        response = self.client.post('/api/items/1/comments/', {
             'user': 1,
             'timestamp': datetime(2013, 12, 30, 20, 30, tzinfo=utc),
             'body': 'comment 1'
@@ -142,7 +142,7 @@ class CommentsViewTest(APITestCase):
             body='comment 1'
         )
 
-        response = self.client.put('/items/1/comments/1/', {
+        response = self.client.put('/api/items/1/comments/1/', {
             'user': 1,
             'timestamp': datetime(2013, 12, 30, 20, 30, tzinfo=utc),
             'body': 'comment modified'
@@ -161,7 +161,7 @@ class UserViewTest(APITestCase):
     def test_get_user(self):
         User.objects.create_user('foo', 'foo@foo.com', 'secret')
 
-        response = self.client.get('/users/1/')
+        response = self.client.get('/api/users/1/')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, {
@@ -174,7 +174,7 @@ class TagsViewTest(APITestCase):
     def test_get(self):
         testutils.create_valid_tag()
 
-        response = self.client.get('/tags/')
+        response = self.client.get('/api/tags/')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, [{
@@ -183,7 +183,7 @@ class TagsViewTest(APITestCase):
         }])
 
     def test_post(self):
-        response = self.client.post('/tags/', {
+        response = self.client.post('/api/tags/', {
             'name': 'a name'
         })
 
@@ -199,7 +199,7 @@ class TagsViewTest(APITestCase):
     def test_delete(self):
         testutils.create_valid_tag()
 
-        response = self.client.delete('/tags/1/')
+        response = self.client.delete('/api/tags/1/')
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Tag.objects.count(), 0)
