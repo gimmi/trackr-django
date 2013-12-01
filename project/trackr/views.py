@@ -4,6 +4,7 @@ from trackr.serializers import ItemSerializer, TagSerializer, CommentSerializer,
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from django.core.paginator import Paginator
 
 
 class ItemView(APIView):
@@ -15,9 +16,15 @@ class ItemView(APIView):
 
 class ItemsView(APIView):
     def get(self, request):
-        items = Item.objects.all()
-        serializer = ItemSerializer(items, many=True)
-        return Response(serializer.data)
+        paginator = Paginator(Item.objects.all(), 20)
+        page = request.QUERY_PARAMS.get('page', 1)
+        page = paginator.page(page)
+        serializer = ItemSerializer(page.object_list, many=True)
+        return Response({
+            'page': page.number,
+            'count': paginator.count,
+            'results': serializer.data
+        })
 
 
 class TagView(APIView):

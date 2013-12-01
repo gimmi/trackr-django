@@ -14,13 +14,17 @@ class ItemsViewTest(APITestCase):
         response = self.client.get('/items/')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, [{
-            'id': 1,
-            'title': 'item title',
-            'body': 'item body',
-            'tags': [{'id': 1, 'name': 'tag name'}],
-            'user': {'id': 1, 'username': 'gimmi'}
-        }])
+        self.assertEqual(response.data, {
+            'page': 1,
+            'count': 1,
+            'results': [{
+                'id': 1,
+                'title': 'item title',
+                'body': 'item body',
+                'tags': [{'id': 1, 'name': 'tag name'}],
+                'user': {'id': 1, 'username': 'gimmi'}
+            }]
+        })
 
 
 class ItemViewTest(APITestCase):
