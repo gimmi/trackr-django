@@ -55,10 +55,12 @@ class CommentView(APIView):
     def put(self, request, item_id, pk):
         comment = Item.objects.get(pk=item_id).comments.get(pk=pk)
         serializer = CommentSerializer(comment, data=request.DATA)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        comment = serializer.object
+        comment.save()
+        serializer = CommentSerializer(comment)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class CommentsView(APIView):
