@@ -1,0 +1,9 @@
+<form role="form" ng-submit="search()">
+  <input type="text" class="form-control input-lg" placeholder="Enter search terms, # for id, + to include tags and - to exclude tags" ng-model="searchText">
+</form>
+<div ng-repeat="result in results">
+  <h4><a ng-href="#/item/{{result.id}}">#{{result.id}}</a> {{result.title}}</h4>
+  <ul class="list-inline">
+    <li ng-repeat="tag in result.tags"><span class="label label-{{tag.type}}">{{tag.name}}</span></li>
+  </ul>
+</div>

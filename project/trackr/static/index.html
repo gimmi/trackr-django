@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="app">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <!-- Fixed navbar -->
     <div class="navbar navbar-default navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
@@ -24,8 +23,14 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">New</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Items <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Search</a></li>
+                <li class="divider"></li>
+                <li><a href="#">Create new</a></li>
+              </ul>
+            </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
@@ -37,24 +42,20 @@
               </ul>
             </li>
           </ul>
-        </div><!--/.nav-collapse -->
+        </div>
       </div>
     </div>
 
     <div class="container">
-      <form role="form">
-        <input type="text" class="form-control input-lg" placeholder="Enter search terms, # for id, + to add tags and - to exclude tags">
-      </form>
-
-      <h4><a href="#">#123</a> Redesign page header</h4>
-      <p><span class="label label-default">Default</span> <span class="label label-primary">Primary</span></p>
-      <h4><a href="#">#456</a> Fix bug</h4>
-      <p><span class="label label-success">Success</span> <span class="label label-info">Info</span></p>
-      <h4><a href="#">#789</a> Rock'n Roll</h4>
-      <p><span class="label label-warning">Warning</span> <span class="label label-danger">Danger</span></p>
-    </div> <!-- /container -->
+      <div id="main-container" ng-view>
+        
+      </div>
+    </div>
 
     <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
     <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.4/angular.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.4/angular-route.min.js"></script>
+    <script src="app.js"></script>
   </body>
 </html>
